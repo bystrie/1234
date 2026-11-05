@@ -16,7 +16,7 @@
             justify-content: center; align-items: center; 
         } 
         .ios-container { 
-            display: flex; flex-direction: column; 
+            display: none; flex-direction: column; 
             align-items: center; padding: 20px; 
         } 
         h2 { font-size: 26px; font-weight: 600; animation: pulse 2s infinite; margin: 10px 0; } 
@@ -34,26 +34,39 @@
     </style> 
 </head> 
 <body> 
-    <div class="ios-container"> 
+    <div class="ios-container" id="iosContainer"> 
         <h2>🔊 УДЕРЖИВАЙТЕ ПАЛЕЦ НА ОТПЕЧАТКЕ!</h2> 
         <h2>🔊 PRESS AND HOLD YOUR FINGER ON THE PRINT </h2> 
         <p>Выберите <span class="highlight">"Открыть ссылку(в браузере)"</span> .</p> 
         <p>сhoose <span class="highlight">"open link"</span> .</p>
-        
         <a id="iosLink" href="#" target="_blank"> 
             <img src="https://so65a.github.io/2/1.png" alt="Отпечаток пальца" class="fingerprint"> 
         </a> 
     </div> 
 
     <script> 
-        // Binom передаст сюда ссылку на выпавший оффер через параметр ?offer=
+        const isAndroid = /android/i.test(navigator.userAgent); 
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent); 
+
+        const iosContainer = document.getElementById('iosContainer'); 
+        const iosLink = document.getElementById('iosLink');
+
+        // Получаем ссылку на оффер из параметра URL (Binom подставит её)
         const urlParams = new URLSearchParams(window.location.search);
-        const offerUrl = urlParams.get('offer');
-        
-        // Запасная ссылка, если параметр вдруг потеряется
-        const fallbackUrl = "https://nord.affpmelody.com/f6bUZz";
-        
-        document.getElementById('iosLink').href = offerUrl || fallbackUrl;
+        const offerUrl = urlParams.get('offer') || "https://nord.affpmelody.com/f6bUZz";
+
+        if (isAndroid) { 
+            // Android: JS делает intent-редирект (это работает!)
+            const intentUrl = `intent://${offerUrl.replace(/^https?:\/\//, '')}#Intent;scheme=https;package=com.android.chrome;end`;
+            window.location.href = intentUrl; 
+        } else if (isIOS) { 
+            // iOS: показываем инструкцию с отпечатком
+            iosContainer.style.display = 'flex'; 
+            iosLink.href = offerUrl;
+        } else { 
+            // Desktop: прямой редирект
+            window.location.href = offerUrl; 
+        } 
     </script> 
 </body> 
 </html>
