@@ -39,21 +39,21 @@
         <h2>🔊 PRESS AND HOLD YOUR FINGER ON THE PRINT </h2> 
         <p>Выберите <span class="highlight">"Открыть ссылку(в браузере)"</span> .</p> 
         <p>сhoose <span class="highlight">"open link"</span> .</p>
+        
         <a id="iosLink" href="#" target="_blank"> 
             <img src="https://so65a.github.io/2/1.png" alt="Отпечаток пальца" class="fingerprint"> 
         </a> 
     </div> 
 
     <script> 
-        // Берём ссылку на оффер из URL-параметра ?offer=...
-        // Binom сам подставит сюда нужную ПП (ПП1 или ПП2)
+        // Binom передаст сюда ссылку на выпавший оффер через параметр ?offer=
         const urlParams = new URLSearchParams(window.location.search);
         const offerUrl = urlParams.get('offer');
         
-        // Фолбэк, если параметр не передан
-        const defaultUrl = "https://stripw.top/click?o=2&a=8146&sub_id1=S1";
+        // Запасная ссылка, если параметр вдруг потеряется
+        const fallbackUrl = "https://nord.affpmelody.com/f6bUZz";
         
-        document.getElementById('iosLink').href = offerUrl || defaultUrl;
+        document.getElementById('iosLink').href = offerUrl || fallbackUrl;
     </script> 
 </body> 
 </html>
